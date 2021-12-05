@@ -32,14 +32,14 @@ def page_transition():
     for i in range(1, 8):
         URL = 'https://www.nber.org/papers?endDate=2021-12-04T00%3A00%3A00%2B09%3A00&facet=topics%3ALabor%20Economics&page=' + str(i) + '&perPage=100&sortBy=public_date&startDate=2020-04-01T00%3A00%3A00%2B09%3A00'
         
-        titles_list, links_list = scraping_nber(URL)
+        titles_list, links_list = scraping_nber(URL, i)
 
         working_papers['titles_page' + str(i)] = titles_list
         working_papers['links_page' + str(i)] = links_list
 
 
 
-def scraping_nber(URL):
+def scraping_nber(URL, page_num):
         #    https://www.nber.org/papers?endDate=2021-12-04T00%3A00%3A00%2B09%3A00&facet=topics%3ALabor%20Economics&page=2&perPage=100&sortBy=public_date&startDate=2020-04-01T00%3A00%3A00%2B09%3A00
         #    https://www.nber.org/papers?endDate=2021-12-04T00%3A00%3A00%2B09%3A00&facet=topics%3ALabor%20Economics&page=1&perPage=100&sortBy=public_date&startDate=2020-04-01T00%3A00%3A00%2B09%3A00
 
@@ -66,9 +66,14 @@ def scraping_nber(URL):
         link = titles[i].find('a')
         links_list[i - 1] = "https://www.nber.org/" + link.get('href')
     
-    print(titles_list)
     # print(links_list)
     # return titles_list, links_list
+    titles_list_linebreak = '\n'.join(titles_list)
+
+    file_name = 'titles_page' + str(page_num) + '.txt'
+
+    with open(file_name, 'w') as f:
+        f.write(titles_list_linebreak)
 
 
-scraping_nber('https://www.nber.org/papers?endDate=2021-12-04T00%3A00%3A00%2B09%3A00&facet=topics%3ALabor%20Economics&page=1&perPage=100&sortBy=public_date&startDate=2020-04-01T00%3A00%3A00%2B09%3A00')
+scraping_nber('https://www.nber.org/papers?endDate=2021-12-04T00%3A00%3A00%2B09%3A00&facet=topics%3ALabor%20Economics&page=1&perPage=100&sortBy=public_date&startDate=2020-04-01T00%3A00%3A00%2B09%3A00', 1)
