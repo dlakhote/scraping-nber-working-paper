@@ -1,5 +1,7 @@
 # reference: https://qiita.com/ulwlu/items/c84501993635c72540a7
 
+from os import EX_CONFIG
+from typing import IO
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
@@ -18,6 +20,9 @@ options.add_argument("--start-maximized")
 options.add_argument('--headless')
 driver = webdriver.Chrome(options=options)
 
+# IO URL
+# https://www.nber.org/papers?endDate=2021-12-04T00%3A00%3A00%2B09%3A00&facet=topics%3AIndustrial%20Organization&page=1&perPage=100&sortBy=public_date&startDate=2020-04-01T00%3A00%3A00%2B09%3A00
+
 def main():
     page_transition()
 
@@ -29,9 +34,18 @@ def page_transition():
 
     URL = ''
 
-    for page_num in range(1, 8):
-        URL = 'https://www.nber.org/papers?endDate=2021-12-04T00%3A00%3A00%2B09%3A00&facet=topics%3ALabor%20Economics&page=' + str(page_num) + '&perPage=100&sortBy=public_date&startDate=2020-04-01T00%3A00%3A00%2B09%3A00'
+    # labor econ
+    # for page_num in range(1, 8):
+
+    # IO
+    for page_num in range(1, 4):
         
+        # labor econ URL
+        # URL = 'https://www.nber.org/papers?endDate=2021-12-04T00%3A00%3A00%2B09%3A00&facet=topics%3ALabor%20Economics&page=' + str(page_num) + '&perPage=100&sortBy=public_date&startDate=2020-04-01T00%3A00%3A00%2B09%3A00'
+        
+        # IO URL
+        URL = 'https://www.nber.org/papers?endDate=2021-12-04T00%3A00%3A00%2B09%3A00&facet=topics%3AIndustrial%20Organization&page=' + str(page_num) + '&perPage=100&sortBy=public_date&startDate=2020-04-01T00%3A00%3A00%2B09%3A00'
+
         scraping_nber(URL, page_num)
 
     return
@@ -64,10 +78,10 @@ def scraping_nber(URL, page_num):
         link = titles[i].find('a')
         links_list[i - 1] = "https://www.nber.org/" + link.get('href')
     
-    output_list_to_text(titles_list, page_num, 0)
-    output_list_to_text(links_list, page_num, 1)
+    # output_list_to_text(titles_list, page_num, 0)
+    # output_list_to_text(links_list, page_num, 1)
 
-    # fetch_abstract(links_list, page_num)
+    fetch_abstract(links_list, page_num)
 
     return
 
@@ -82,21 +96,36 @@ def output_list_to_text(li, page_num, code):
     if code == 0:
         titles_list_linebreak = '\n\n'.join(li)
 
-        titles_file_name = 'titles/titles_page' + str(page_num) + '.txt'
+        # labor econ
+        # titles_file_name = 'titles/titles_page' + str(page_num) + '.txt'
+
+        # IO
+        titles_file_name = 'titles/titles_IO_page' + str(page_num) + '.txt'
+
         with open(titles_file_name, 'w') as f:
             f.write(titles_list_linebreak)
 
     elif code == 1:
         links_list_linebreak = '\n\n'.join(li)
 
-        links_file_name = 'links/links_page' + str(page_num) + '.txt'
+        # labor econ
+        # links_file_name = 'links/links_page' + str(page_num) + '.txt'
+
+        # IO
+        links_file_name = 'links/links_IO_page' + str(page_num) + '.txt'
+
         with open(links_file_name, 'w') as f:
             f.write(links_list_linebreak)
 
     else:
         abstracts_list_linebreak = '\n\n'.join(li)
 
-        abstracts_file_name = 'abstracts/abstracts_page' + str(page_num) + '.txt'
+        # labor econ
+        # abstracts_file_name = 'abstracts/abstracts_page' + str(page_num) + '.txt'
+
+        # IO
+        abstracts_file_name = 'abstracts/abstracts_IO_page' + str(page_num) + '.txt'
+
         with open(abstracts_file_name, 'w') as f:
             f.write(abstracts_list_linebreak)
 
